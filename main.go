@@ -6,31 +6,39 @@ import (
 	"os"
 )
 
-type Project struct {
-	name string
-	path string
-}
-
 func main() {
 	fmt.Println("Lets set up a new project!")
-	fmt.Println("What is the name of your project?")
-	reader := bufio.NewReader(os.Stdin)
+
+	fileDir := setUpDir()
+
+}
+
+func setUpDir() string {
+	dirPath := askQuestion("Please provide the file path from the root directory.")
+	err := os.MkdirAll(dirPath, 0700)
+	if err != nil {
+		fmt.Println(err)
+		return setUpDir()
+	}
+	return dirPath
+}
+
+// Handle all inputs from the user
+func askQuestion(s string) string {
+	fmt.Println(s)
+	scanner := bufio.NewScanner(os.Stdin)
 	for {
-		response, err := reader.ReadBytes('\n')
-		if err != nil || response == nil {
-			fmt.Println(err)
-			continue
+		scanner.Scan()
+		in := scanner.Text()
+		if in != "" {
+			return in
+		} else {
+			fmt.Println("Please enter a valid response")
 		}
 
 	}
-	setUpDir(response)
 }
 
-func (p Project) setUpDir() error {
-	err := os.MkdirAll(p.path, 0750)
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
+func createFiles() {
+	os.
 }
